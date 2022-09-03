@@ -1,15 +1,21 @@
 <template>
-  <hello-world />
+    <v-app id="inspire" :style="{background: $vuetify.theme.themes.dark.background}">
+      <SideBar></SideBar>
+      <SideBarRigth></SideBarRigth>
+    </v-app>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
+
+  import SideBar from '@/components/SideBar.vue';
+  import SideBarRigth from '@/components/SideBarRigth.vue';
 
   export default {
     name: 'Home',
 
     components: {
-      HelloWorld,
-    },
+    SideBar,
+    SideBarRigth
+},
   }
 </script>
