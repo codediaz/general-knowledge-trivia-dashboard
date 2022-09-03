@@ -8,14 +8,12 @@
 <script>
 
   import SideBar from '@/components/SideBar.vue';
-  import SideBarRigth from '@/components/SideBarRigth.vue';
 
   export default {
     name: 'Home',
 
     components: {
     SideBar,
-    SideBarRigth
 },
   }
 </script>
