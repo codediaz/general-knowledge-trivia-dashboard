@@ -36,7 +36,7 @@
                 {icon: 'fas fa-plus'},
                 {icon: 'fas fa-th-large'},
                 {icon: 'fas fa-align-center'},
-                {icon: 'fas fa-gitter'},
+                {icon: 'fa-brands fa-gitter'},
                 {icon: 'fas fa-chart-line'},
             ]
         })
