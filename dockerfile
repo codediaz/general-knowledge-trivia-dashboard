@@ -7,7 +7,8 @@ COPY . /usr/src/app
 
 WORKDIR /usr/src/app
 
-#RUN npm install --force
+EXPOSE 8081
 
-#CMD ["npm", "run", "serve"]
+RUN npm install --force
 
+CMD ["npm", "run", "serve"]
