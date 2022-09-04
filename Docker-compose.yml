@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    working_dir: /usr/src/app
+    container_name: general-knowledge-trivia-dashboard
+    restart: unless-stopped
+
+    volumes:
+      - ./:/usr/src/app
+      
+    stdin_open: true
+    tty: true
+    ports:
+      - "${SERVER_PORT}:8081"
+    networks:
+      - general-knowledge-trivia-dashboard-network
+
+networks:
+  general-knowledge-trivia-dashboard-network:
+    external:
+      name: develop-with-vpn
