@@ -3,20 +3,30 @@
       <SideBar></SideBar>
       <v-container>
       <v-row class="mt-n6">
-        <v-col cols="12" md="12" sm="12">
+        <v-col cols="12" md="12" sm="12" class="mt-10">
            <v-toolbar color="rgba(0,0,0,0)" flat class="mt-n2">
-       <v-toolbar-title></v-toolbar-title>
+       <v-toolbar-title>
+        <h2>
+            Usuarios
+        </h2>
+      </v-toolbar-title>
          <v-spacer></v-spacer>
        </v-toolbar>
        <v-data-table
           :headers="headers"
-          :items="desserts"
-          :sort-by="['calories', 'fat']"
+          :items="triviaData.data"
+          :sort-by="name"
           :sort-desc="[false, true]"
           multi-sort
           :loading = "loadtable"
-          loading-text="Cargando... Por favor espere"
-          class="elevation-1">
+          loading-text="Cargando..."
+          class="elevation-1"
+        >
+        <template v-slot:[`item.name`]= "{ item }">{{ item.user.first_name }} {{ item.user.surname}}</template>
+        <template v-slot:[`item.time`]= "{ item }">{{ item.result.time_played }}</template>
+        <template v-slot:[`item.hits`]= "{ item }">{{ item.result.right_answers }}</template>
+        <template v-slot:[`item.errors`]= "{ item }">{{ item.result.wrong_answers }}</template>
+        <template v-slot:[`item.success_rate`]= "{ item }">{{ item.result.success_rate }}</template>
         </v-data-table>
         </v-col>
       </v-row> 
@@ -25,116 +35,58 @@
 </template>
 <script>
   import SideBar from '../components/SideBar'
+  import axios from "axios";
  
   export default {
-    name: 'Home',
-    data () {
+   name: 'Home',
+   data() {
       return {
-        loadtable:false,
+        loadtable:true,
         headers: [
           {
-            text: 'Dessert (100g serving)',
+            text: 'Nombre',
             align: 'start',
             sortable: false,
             value: 'name',
           },
-          { text: 'Calories', value: 'calories' },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-          { text: 'Protein (g)', value: 'protein' },
-          { text: 'Iron (%)', value: 'iron' },
+          { text: 'Duración', value: 'time' },
+          { text: 'Aciertos', value: 'hits' },
+          { text: 'Errores', value: 'errors' },
+          { text: 'Puntuación', value: 'success_rate'},
         ],
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 200,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-            iron: '1%',
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 200,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-            iron: '1%',
-          },
-          {
-            name: 'Eclair',
-            calories: 300,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-            iron: '7%',
-          },
-          {
-            name: 'Cupcake',
-            calories: 300,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-            iron: '8%',
-          },
-          {
-            name: 'Gingerbread',
-            calories: 400,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-            iron: '16%',
-          },
-          {
-            name: 'Jelly bean',
-            calories: 400,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-            iron: '0%',
-          },
-          {
-            name: 'Lollipop',
-            calories: 400,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-            iron: '2%',
-          },
-          {
-            name: 'Honeycomb',
-            calories: 400,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-            iron: '45%',
-          },
-          {
-            name: 'Donut',
-            calories: 500,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-            iron: '22%',
-          },
-          {
-            name: 'KitKat',
-            calories: 500,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-            iron: '6%',
-          },
-        ],
+        triviaData:[],
       }
     },
     components: {
       SideBar,
       
     },
-    provide: {
-    //[THEME_KEY]: "green"
-  },  
+    methods:{
+      async fetchDataTrivia() {
+
+        let route = "http://localhost:8080/v1/categories/79416c6d-8a20-4ec7-993a-bbe3f8725b1c/games?page=1";
+
+        await axios.get(route,{
+                        headers:{}
+            })
+            .then((response) =>
+            {
+              this.triviaData = response.data;
+              this.loadtable = false;
+            })
+            .catch(err => {
+              console.log(`${err} whilst contacting the quote API.`)
+            });
+        
+        return Promise.resolve({
+            data: []
+         })
+      }
+      
+    },
+    created(){
+      this.fetchDataTrivia()
+    }  
   }
 </script>
 <style>
